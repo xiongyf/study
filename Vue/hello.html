@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+	<script type="text/javascript" src="vue.js"></script>
+</head>
+    <body>
+        <div id="root">
+	
+			姓：<input v-model="first"/><br>
+			名：<input v-model="last"/>
+			<div>姓名：{{full}}</div>
+			<div>计数: {{count}}</div>
+			<button @click="toggle">toggle</button><br>
+			<div v-show="show">Hello</div>
+
+			<input v-model="inputValue"/>
+			<button @click="add">提交</button>
+			<div>Todo list:</div>
+			<ul>	
+				<todo-item 
+					v-for="(item,index) of list" 
+					:content="item"
+					:index="index"
+					@del="doDel"
+					>
+				</todo-item>
+			</ul>
+		</div>
+			
+		
+		<script>
+
+			Vue.component('todo-item',{
+				props:['content','index'],
+				template:'<li @click="del(index)">{{content}}</li>',
+				methods:{
+					del:function(index){
+						this.$emit('del',index);
+					}
+				}
+			})
+
+			new Vue({
+				el:"#root",
+
+				data:{
+					first:'',
+					last:'',
+					count:0,
+					show:true,
+					inputValue:'',
+					list:[]
+				},
+				computed:{
+					full:function(){
+						return this.first+" "+this.last;
+					}
+				},
+				watch:{
+					full:function(){
+						return this.count++;
+					}
+				},
+
+				methods:{
+					change:function(){
+						this.msg="Hi";
+					},
+					toggle:function(){
+						this.show=!this.show;
+					},
+					add:function(){
+						if(this.inputValue){
+							this.list.push(this.inputValue);
+							this.inputValue='';
+						}
+					},
+					doDel:function(index){
+						this.list.splice(index, 1);
+					}
+				
+				}
+			
+			})
+		
+		</script>
+    </body>
+</html>
