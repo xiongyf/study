@@ -1,12 +1,13 @@
 <template>
   <div>
-      <ul>
-        <li v-for="(item,index) in list" :key="index" :style="{fontSize:postFontSize + 'em' }" @click="onSelected(item,index)">
-          <span>{{item.name}}</span>
-          <span>{{item.value}}</span>
-          <span>{{item.percentage}}</span>
-        </li>
-      </ul>
+    <ul>
+      <li v-for="(item,index) in list" :key="index" :style="{fontSize:postFontSize + 'em' }"
+          @click="onSelected(item,index)">
+        <span>{{item.name}}</span>
+        <span>{{item.value}}</span>
+        <span>{{item.percentage}}</span>
+      </li>
+    </ul>
 
   </div>
 </template>
@@ -19,14 +20,14 @@
     },
     props: {
       list: Array,
-      postFontSize:{
-        type:Number,
-        default:1
+      postFontSize: {
+        type: Number,
+        default: 1
       }
     },
-    methods:{
-      onSelected(item,index){
-        this.$emit('onSelected',item,index);
+    methods: {
+      onSelected(item, index) {
+        this.$emit('onSelected', item, index);
       }
     }
   }

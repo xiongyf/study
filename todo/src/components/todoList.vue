@@ -11,7 +11,6 @@
         @del="doDel"
       ></todo-item>
     </ul>
-    <rank-list :list="rankList" :postFontSize=fontSize @onSelected="onListSelected"></rank-list>
   </div>
 </template>
 
@@ -19,36 +18,17 @@
   import TodoItem from './TodoItem'
   import {mapActions} from 'vuex'
   import * as service from '../service/service'
-  import RankList from './RankList'
 
   export default {
     name: "TodoList",
     components: {
-      TodoItem,
-      RankList
+      TodoItem
     },
     data() {
       return {
         inputValue: '',
         list: [],
-        fontSize:1,
-        rankList: [
-          {
-            name: 'Apple',
-            value: '9',
-            percentage: '20%'
-          },
-          {
-            name: 'Li',
-            value: '8',
-            percentage: '20%'
-          },
-          {
-            name: 'Mango',
-            value: '6',
-            percentage: '10%'
-          }
-        ]
+        fontSize:1
       }
     },
     methods: {
@@ -63,9 +43,9 @@
           this.doSetData({
             msg: this.inputValue
           });
-          this.add(this.inputValue);
+          //this.add(this.inputValue);
           this.inputValue = '';
-          this.currUser()
+          //this.currUser()
         }
       },
       doDel(index) {
@@ -80,9 +60,6 @@
         service.getCurrUser().then((resp) => {
           console.log(resp.body);
         })
-      },
-      onListSelected(item,index){
-        console.log(item.name+' '+index)
       }
     },
     mounted() {
