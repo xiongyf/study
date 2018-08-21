@@ -8,31 +8,22 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 public class Producer {
-	
-	public static void main(String[] args) throws IOException, TimeoutException {
-        //创建连接工厂
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setUsername("guest");
-        factory.setPassword("guest");
-        //设置 RabbitMQ 地址
-        factory.setHost("localhost");
-        //建立到代理服务器到连接
-        Connection conn = factory.newConnection();
-        //获得信道
-        Channel channel = conn.createChannel();
-        //声明交换器
-        String exchangeName = "hello-exchange";
-        channel.exchangeDeclare(exchangeName, "direct", true);
 
-        String routingKey = "hello";
-        //发布消息
-        byte[] messageBodyBytes = "Hello world".getBytes();
-        BasicProperties properties=new BasicProperties();
+	private final static String QUEUE_NAME = "hello";
 
-        channel.basicPublish(exchangeName, routingKey, properties, messageBodyBytes);
+	public static void main(String[] argv) throws Exception {
+		ConnectionFactory factory = new ConnectionFactory();
+		factory.setHost("localhost");
+		Connection connection = factory.newConnection();
+		Channel channel = connection.createChannel();
 
-        channel.close();
-        conn.close();
-    }
+		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		String message = "Hello World!";
+		channel.basicPublish("", QUEUE_NAME, null, message.getBytes("UTF-8"));
+		System.out.println(" [x] Sent '" + message + "'");
+
+		channel.close();
+		connection.close();
+	}
 
 }
