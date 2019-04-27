@@ -12,14 +12,10 @@ import org.junit.Test;
 
 public class AuthenticationTest {
 
-    SimpleAccountRealm realm = new SimpleAccountRealm();
-
-    @Before
-    public void addUser() {
-       // realm.addAccount("admin1", "123456","admin","staff");
-    }
 
     public void authenticate() {
+        SimpleAccountRealm realm = new SimpleAccountRealm();
+        realm.addAccount("admin1", "123456", "admin", "staff");
 
         // 构建securityManager环境
         DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
@@ -38,10 +34,9 @@ public class AuthenticationTest {
 
     }
 
-    @Test
-    public void iniRealmTest(){
+    public void iniRealmTest() {
 
-        IniRealm realm=new IniRealm("classpath:user.ini");
+        IniRealm realm = new IniRealm("classpath:user.ini");
 
         // 构建securityManager环境
         DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
@@ -56,8 +51,29 @@ public class AuthenticationTest {
         System.out.println(subject.getPrincipal());//用户名
         subject.checkRole("admin");
         subject.checkPermission("user:add");
-        subject.logout();
-        System.out.println(subject.isAuthenticated());
+
     }
+
+    @Test
+    public void customRealmTest() {
+
+        CustomRealm realm = new CustomRealm();
+
+        // 构建securityManager环境
+        DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
+        defaultSecurityManager.setRealm(realm);
+
+        // 主体提交认证请求
+        SecurityUtils.setSecurityManager(defaultSecurityManager);
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken("cat", "123456");
+        subject.login(token);
+        System.out.println(subject.isAuthenticated());
+        System.out.println(subject.getPrincipal());//用户名
+        subject.checkRole("admin");
+        subject.checkPermission("user:add");
+
+    }
+
 
 }
